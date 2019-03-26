@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/account"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="22sp"
+        android:layout_marginTop="12dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:text="Enter your mobile number"/>
+    <TextView
+        android:layout_width="300dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:text="We will send a 6-digit Verification Code to this mobile number"/>
+    <EditText
+        android:id="@+id/login_phone"
+        android:layout_width="300dp"
+        android:padding="10dp"
+        android:hint="+91"
+        android:inputType="phone"
+        android:layout_marginBottom="10dp"
+        android:maxLines="1"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"
+        android:background="@drawable/border_text_search"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/login_otp"
+        android:layout_width="300dp"
+        android:padding="10dp"
+        android:maxLength="12"
+        android:gravity="center"
+        android:hint="Enter Otp"
+        android:inputType="number"
+        android:maxLines="1"
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/border_text_search"
+        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content">
+        <Button
+            android:text="Get Verification Code"
+            android:id="@+id/login"
+            android:background="@drawable/botton_verify"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content" />
+        <Button
+            android:text="Submit Otp"
+            android:id="@+id/otp"
+            android:background="@drawable/botton_verify"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:textSize="18sp"
+            android:visibility="gone"
+            android:textAllCaps="false"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:id="@+id/otpText"
+        android:visibility="gone"
+        android:text="Otp has been set to your number"/>
+    <ProgressBar
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
+        android:padding="5dp"
+        android:layout_gravity="center"
+        android:id="@+id/login_prgbar"
+        android:layout_width="40dp"
+        android:layout_height="40dp" />
+</LinearLayout>
