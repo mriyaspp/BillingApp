@@ -57,15 +57,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initial();
 
-        //      progressBar.setVisibility(View.VISIBLE);
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        try {
+            s_uid = mAuth.getUid();
 
+        } catch (Exception e) {
+            s_uid = null;
+        }
+        if (s_uid == null) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+        } else {
+            initial();
+            //      progressBar.setVisibility(View.VISIBLE);
+            addToCart();
+            Toast.makeText(this, "" + key, Toast.LENGTH_SHORT).show();
+        }
 
-        addToCart();
-
-
-        Toast.makeText(this, "" + key, Toast.LENGTH_SHORT).show();
     }
 
     private void addToCart() {
@@ -168,10 +178,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.prograss);
         OrderButton = (Button) findViewById(R.id.order);
         headerDatabase = FirebaseDatabase.getInstance().getReference().child("user");
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
         Cart = FirebaseDatabase.getInstance().getReference().child("Cart").child(mAuth.getUid());
-
         FloatingActionButton fButton = (FloatingActionButton) findViewById(R.id.addNew);
         Total = (TextView) findViewById(R.id.cart_price);
         fButton.setOnClickListener(new View.OnClickListener() {
@@ -188,18 +195,7 @@ public class MainActivity extends AppCompatActivity {
         homeRecyclerView.setHasFixedSize(true);
         homeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         key = getIntent().getStringExtra("key");
-        try {
-            s_uid = mAuth.getUid();
 
-        } catch (Exception e) {
-            s_uid = null;
-        }
-        if (s_uid == null) {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            finish();
-        } else {
-
-        }
 
         orderList = new ArrayList<>();
 //        myRef.addValueEventListener(new ValueEventListener() {
