@@ -8,11 +8,11 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +24,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,7 +48,7 @@ public class DetailsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private RecyclerView homeRecyclerView;
     private List<Bill> orderList;
-    Double total=0.0;
+    Double total = 0.0;
     private String dat;
     private ImageView productQR;
     private Button download;
@@ -64,6 +63,7 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+        key = getIntent().getStringExtra("key");
         Initial();
         genQRCode();
     }
@@ -125,20 +125,18 @@ public class DetailsActivity extends AppCompatActivity {
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }
+
     private void Initial() {
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/opensans.ttf");
-        TextView head=(TextView)findViewById(R.id.head);
         homeRecyclerView = findViewById(R.id.billList);
         homeRecyclerView.setHasFixedSize(true);
         homeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         productQR = findViewById(R.id.ivQRCode);
         download = findViewById(R.id.btDownload);
 
-        head.setTypeface(typeface);
-
         orderList = new ArrayList<>();
-        mAuth= FirebaseAuth.getInstance();
-        Cart= FirebaseDatabase.getInstance().getReference().child("Purchase");
+        mAuth = FirebaseAuth.getInstance();
+        Cart = FirebaseDatabase.getInstance().getReference().child("Purchase").child(key);
 
 
         Cart.addValueEventListener(new ValueEventListener() {
@@ -147,7 +145,6 @@ public class DetailsActivity extends AppCompatActivity {
 
                 orderList.clear();
                 for (DataSnapshot billChild : dataSnapshot.getChildren()) {
-                    key=billChild.getKey().toString();
                     if (billChild.getValue() != null) {
                         String value = billChild.getValue().toString();
                         String[] arr = value.split(",");
@@ -158,7 +155,7 @@ public class DetailsActivity extends AppCompatActivity {
                             bill.setTax(arr[2]);
                             bill.setAmount(arr[3]);
                             bill.setTotal(arr[4]);
-                    //        total += Long.parseLong(arr[4]);
+                            //        total += Long.parseLong(arr[4]);
                             bill.setUserName(arr[5]);
                             bill.setPhon(arr[6]);
                             bill.setStatus(arr[7]);
@@ -167,26 +164,20 @@ public class DetailsActivity extends AppCompatActivity {
                             orderList.add(bill);
 
 //                            total=total+Double.parseDouble(bill.getAmount());
-                            Toast.makeText(DetailsActivity.this, ""+billChild.getKey(), Toast.LENGTH_SHORT).show();
                         } catch (IndexOutOfBoundsException e) {
                             Log.e("Array Err", e.getMessage());
                         }
                     }
 
 
-
-                   // Data order = orderChild.getValue(Data.class);
-
+                    // Data order = orderChild.getValue(Data.class);
 
 
-               //     Toast.makeText(DetailsActivity.this, ""+order.getName(), Toast.LENGTH_SHORT).show();
+                    //     Toast.makeText(DetailsActivity.this, ""+order.getName(), Toast.LENGTH_SHORT).show();
                 }
-
-
-
                 OrderListAdapter adapter = new OrderListAdapter(orderList, getApplicationContext());
                 homeRecyclerView.setAdapter(adapter);
-                if(orderList.isEmpty()){
+                if (orderList.isEmpty()) {
                     Toast.makeText(DetailsActivity.this, "Cart is empty", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -198,13 +189,7 @@ public class DetailsActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
-
     }
-
 
 
     public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderViewHolder> {
@@ -230,16 +215,16 @@ public class DetailsActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull OrderViewHolder orderViewHolder, int i) {
             try {
                 final Bill order = orderList.get(i);
-            Toast.makeText(mCtx, ""+order.getName(), Toast.LENGTH_SHORT).show();
-            Toast.makeText(mCtx, ""+i, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mCtx, "" + order.getName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mCtx, "" + i, Toast.LENGTH_SHORT).show();
                 orderViewHolder.name.setText(order.getName());
                 orderViewHolder.tax.setText(order.getTax());
                 orderViewHolder.price.setText(order.getAmount());
-                orderViewHolder.sno.setText(""+(i+1));
+                orderViewHolder.sno.setText("" + (i + 1));
                 orderViewHolder.qty.setText("" + 1);
                 Double subTot = (1 * Double.parseDouble(order.getAmount())) + Double.parseDouble(order.getTax());
                 orderViewHolder.total.setText("" + subTot);
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
 //            orderViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -277,11 +262,10 @@ public class DetailsActivity extends AppCompatActivity {
                 sno = itemView.findViewById(R.id.sno);
                 qty = itemView.findViewById(R.id.qty);
                 total = itemView.findViewById(R.id.total);
-                cardView=itemView.findViewById(R.id.card);
+                cardView = itemView.findViewById(R.id.card);
             }
         }
     }
-
 
 
 }

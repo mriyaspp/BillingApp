@@ -5,16 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DetailsActivity">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="QFree"
-        android:textStyle="bold"
-        android:id="@+id/head"
-        android:textSize="38sp"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -33,7 +23,7 @@
         android:gravity="center"
         android:layout_marginLeft="10dp"
         android:id="@+id/billhead"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:weightSum="6"
         android:layout_below="@+id/desc">
         <TextView
@@ -89,18 +79,18 @@
 
     </LinearLayout>
 
-<android.support.v7.widget.RecyclerView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/billList"
-    android:layout_marginTop="10dp"
-    android:layout_below="@+id/billhead"></android.support.v7.widget.RecyclerView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/billList"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@+id/billhead"
+        android:layout_marginTop="10dp"></android.support.v7.widget.RecyclerView>
     <ImageView
         android:id="@+id/ivQRCode"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_below="@id/billList"
     />
     <Button
