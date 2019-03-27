@@ -5,6 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/prograss"
+        android:visibility="gone"/>
 <android.support.v7.widget.RecyclerView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,11 +20,42 @@
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/priceLayout"
         android:layout_alignParentRight="true"
-        android:layout_margin="10dp"
+        android:layout_marginRight="10dp"
         android:id="@+id/addNew"
         android:src="@drawable/ic_aaddnew"
         />
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:id="@+id/priceLayout"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/cart_price"
+            android:layout_weight="1"
+            android:text="Rs.000"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:padding="5dp"
+            android:background="@drawable/border_tax_inv"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+        <Button
+            android:text="Order"
+            android:layout_weight="1"
+            android:background="@drawable/border_tax"
+            android:textColor="@color/white"
+            android:id="@+id/order"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+    </LinearLayout>
 
 </RelativeLayout>

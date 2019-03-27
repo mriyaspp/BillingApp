@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:layout_margin="10dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="S.No"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:textSize="18sp"
+        android:id="@+id/sno"
+        android:textColor="@color/darkgray"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ItmName"
+        android:gravity="center"
+        android:id="@+id/name"
+        android:layout_weight="1"
+        android:textSize="18sp"
+        android:textColor="@color/darkgray"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Qty"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:id="@+id/qty"
+        android:textSize="18sp"
+        android:textColor="@color/darkgray"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rate"
+        android:gravity="center"
+        android:id="@+id/rate"
+        android:layout_weight="1"
+        android:textSize="20sp"
+        android:textColor="@color/darkgray"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tax"
+        android:text="Tax"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:textSize="20sp"
+        android:textColor="@color/darkgray"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total"
+        android:id="@+id/total"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:textSize="20sp"
+        android:layout_marginRight="20dp"
+        android:textColor="@color/darkgray"/>
+
+</LinearLayout>

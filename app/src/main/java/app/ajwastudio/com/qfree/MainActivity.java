@@ -3,6 +3,7 @@ package app.ajwastudio.com.qfree;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -43,7 +45,10 @@ public class MainActivity extends AppCompatActivity {
     private List<Data> orderList;
     private FirebaseDatabase database;
     DatabaseReference myRef;
-
+    private Button OrderButton;
+    Double total=0.0;
+    TextView Total;
+    ProgressBar progressBar;
 
     private DatabaseReference Cart;
 
@@ -60,7 +65,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initial();
+
+  //      progressBar.setVisibility(View.VISIBLE);
+
+
         addToCart();
+
+
+
+
         Toast.makeText(this, ""+key, Toast.LENGTH_SHORT).show();
     }
 
@@ -76,67 +89,80 @@ public class MainActivity extends AppCompatActivity {
 //            order[0] = gson.fromJson(json, Data.class);
 //            orderList.add(order[0]);
 //        }
-            mBillRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.hasChild(key + "")) {
+//            mBillRef.addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    if (dataSnapshot.hasChild(key + "")) {
+//
+//                            final Data order = dataSnapshot.child(key+"").getValue(Data.class);
+//                                    DatabaseReference db=Cart.push();
+//                                    db.child("name").setValue(order.getName());
+//                                    db.child("amount").setValue(order.getAmount());
+//                                    db.child("tax").setValue(order.getTax());
+//
+//
+//                            //Toast.makeText(MainActivity.this, ""+orderList.get(0), Toast.LENGTH_SHORT).show();
+//
+//
+//
+////                        String json = gson.toJson(order[0]);
+////                        prefsEditor.putString("MyObject", json);
+////                        prefsEditor.commit();
+//
+//                    } else {
+//                        Toast.makeText(MainActivity.this, "Product is not availeble in the databse", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                }
+//            });
 
-                            final Data order = dataSnapshot.child(key+"").getValue(Data.class);
-                                    DatabaseReference db=Cart.push();
-                                    db.child("name").setValue(order.getName());
-                                    db.child("price").setValue(order.getAmount());
-                                    db.child("tax").setValue(order.getTax());
+                Cart.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        progressBar.setVisibility(View.VISIBLE);
+
+                        try {
+
+                            orderList.clear();
+                            for (DataSnapshot orderChild : dataSnapshot.getChildren()) {
+                                Data order = orderChild.getValue(Data.class);
+                                orderList.add(order);
+                                total = total + Double.parseDouble(order.getAmount());
+                                //Toast.makeText(MainActivity.this, ""+orderList.get(0), Toast.LENGTH_SHORT).show();
+                            }
+                        }catch (Exception e){
+
+                        }
 
 
-                            //Toast.makeText(MainActivity.this, ""+orderList.get(0), Toast.LENGTH_SHORT).show();
+                        Total.setText(""+total);
 
-
-
-//                        String json = gson.toJson(order[0]);
-//                        prefsEditor.putString("MyObject", json);
-//                        prefsEditor.commit();
-
-                    } else {
-                        Toast.makeText(MainActivity.this, "Product is not availeble in the databse", Toast.LENGTH_SHORT).show();
+                        OrderListAdapter adapter = new OrderListAdapter(orderList, getApplicationContext());
+                        homeRecyclerView.setAdapter(adapter);
+                        if(orderList.isEmpty()){
+                            Toast.makeText(MainActivity.this, "Cart is empty", Toast.LENGTH_SHORT).show();
+                        }
+                        progressBar.setVisibility(View.GONE);
                     }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                }
-            });
-
-            Cart.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-
-                    orderList.clear();
-                for (DataSnapshot orderChild : dataSnapshot.getChildren()) {
-                    Data order = orderChild.getValue(Data.class);
-                    orderList.add(order);
-                    //Toast.makeText(MainActivity.this, ""+orderList.get(0), Toast.LENGTH_SHORT).show();
-                }
-
-                    OrderListAdapter adapter = new OrderListAdapter(orderList, getApplicationContext());
-                    homeRecyclerView.setAdapter(adapter);
-                    if(orderList.isEmpty()){
-                        Toast.makeText(MainActivity.this, "Cart is empty", Toast.LENGTH_SHORT).show();
                     }
+                });
 
+                OrderButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(MainActivity.this,Payment.class));
 
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-
-
-
-
+                    }
+                });
 
 
 
@@ -151,12 +177,15 @@ public class MainActivity extends AppCompatActivity {
 //                .getDefaultSharedPreferences(this.getApplicationContext());
 //        prefsEditor = appSharedPrefs.edit();
 //        gson = new Gson();
+        progressBar=(ProgressBar)findViewById(R.id.prograss);
+        OrderButton=(Button)findViewById(R.id.order);
         headerDatabase = FirebaseDatabase.getInstance().getReference().child("user");
         mAuth= FirebaseAuth.getInstance();
         user=mAuth.getCurrentUser();
         Cart= FirebaseDatabase.getInstance().getReference().child("Cart").child(mAuth.getUid());
 
         FloatingActionButton fButton=(FloatingActionButton)findViewById(R.id.addNew);
+        Total=(TextView)findViewById(R.id.cart_price);
         fButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

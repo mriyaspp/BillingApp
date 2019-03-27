@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailsActivity">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="QFree"
+        android:textStyle="bold"
+        android:id="@+id/head"
+        android:textSize="38sp"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Shoppping Bill"
+        android:layout_below="@+id/head"
+        android:id="@+id/desc"
+        android:textSize="28sp"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/billhead"
+        android:layout_marginTop="20dp"
+        android:weightSum="6"
+        android:layout_below="@+id/desc">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="S.No"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ItmName"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Qty"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rate"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tax"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
+
+<android.support.v7.widget.RecyclerView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/billList"
+    android:layout_marginTop="10dp"
+    android:layout_below="@+id/billhead"></android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>
