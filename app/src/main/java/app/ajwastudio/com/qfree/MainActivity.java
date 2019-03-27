@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     Double total = 0.0;
     TextView Total;
     ProgressBar progressBar;
+    OrderListAdapter adapter;
 
     private DatabaseReference Cart;
 
@@ -82,45 +84,6 @@ public class MainActivity extends AppCompatActivity {
         final DatabaseReference mBillRef = database.getReference().child("Product");
         orderList = new ArrayList<>();
 
-//        SharedPreferences appSharedPrefs = PreferenceManager
-//                .getDefaultSharedPreferences(getApplicationContext());
-//        gson = new Gson();
-//        String json = appSharedPrefs.getString("MyObject", "");
-//        if(json!=null) {
-//            order[0] = gson.fromJson(json, Data.class);
-//            orderList.add(order[0]);
-//        }
-//            mBillRef.addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                    if (dataSnapshot.hasChild(key + "")) {
-//
-//                            final Data order = dataSnapshot.child(key+"").getValue(Data.class);
-//                                    DatabaseReference db=Cart.push();
-//                                    db.child("name").setValue(order.getName());
-//                                    db.child("amount").setValue(order.getAmount());
-//                                    db.child("tax").setValue(order.getTax());
-//
-//
-//                            //Toast.makeText(MainActivity.this, ""+orderList.get(0), Toast.LENGTH_SHORT).show();
-//
-//
-//
-////                        String json = gson.toJson(order[0]);
-////                        prefsEditor.putString("MyObject", json);
-////                        prefsEditor.commit();
-//
-//                    } else {
-//                        Toast.makeText(MainActivity.this, "Product is not availeble in the databse", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                }
-//            });
-
         Cart.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -132,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
                     orderList.clear();
                     for (DataSnapshot orderChild : dataSnapshot.getChildren()) {
                         Data order = orderChild.getValue(Data.class);
+                        order.setId(orderChild.getKey());
                         orderList.add(order);
                         total = total + Double.parseDouble(order.getAmount());
                         //Toast.makeText(MainActivity.this, ""+orderList.get(0), Toast.LENGTH_SHORT).show();
@@ -143,8 +107,10 @@ public class MainActivity extends AppCompatActivity {
 
                 Total.setText("" + total);
 
-                OrderListAdapter adapter = new OrderListAdapter(orderList, getApplicationContext());
+                adapter = new OrderListAdapter(orderList, getApplicationContext());
                 homeRecyclerView.setAdapter(adapter);
+                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+                itemTouchHelper.attachToRecyclerView(homeRecyclerView);
                 if (orderList.isEmpty()) {
                     Toast.makeText(MainActivity.this, "Cart is empty", Toast.LENGTH_SHORT).show();
                 }
@@ -169,12 +135,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initial() {
-        //intial shared preference
 
-//        appSharedPrefs = PreferenceManager
-//                .getDefaultSharedPreferences(this.getApplicationContext());
-//        prefsEditor = appSharedPrefs.edit();
-//        gson = new Gson();
         progressBar = (ProgressBar) findViewById(R.id.prograss);
         OrderButton = (Button) findViewById(R.id.order);
         headerDatabase = FirebaseDatabase.getInstance().getReference().child("user");
@@ -198,33 +159,28 @@ public class MainActivity extends AppCompatActivity {
 
 
         orderList = new ArrayList<>();
-//        myRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                orderList.clear();
-//                for (DataSnapshot orderChild : dataSnapshot.getChildren()) {
-//                    Data order = orderChild.getValue(Data.class);
-//                    orderList.add(order);
-//                    //Toast.makeText(MainActivity.this, ""+orderList.get(0), Toast.LENGTH_SHORT).show();
-//                }
-////                final Data orderIt = orderList.get(2);
-////                Toast.makeText(MainActivity.this, ""+orderIt.getAmount(), Toast.LENGTH_SHORT).show();
-//
-//                OrderListAdapter adapter = new OrderListAdapter(orderList, getApplicationContext());
-//                homeRecyclerView.setAdapter(adapter);
-//    //            progressBar.setVisibility(View.GONE);
-//            }
-
-
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
 
 
     }
 
+    ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.DOWN | ItemTouchHelper.UP) {
+
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            //Remove swiped item from list and notify the RecyclerView
+            int position = viewHolder.getAdapterPosition();
+            String key = adapter.orderList.get(position).getId();
+            database.getReference().child("Cart").child(mAuth.getUid()).child(key).setValue(null);
+            orderList.remove(position);
+            adapter.notifyDataSetChanged();
+
+        }
+    };
 
     public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderViewHolder> {
         private List<Data> orderList;

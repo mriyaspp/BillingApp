@@ -4,6 +4,7 @@ public class Data {
     private String name;
     private String amount;
     private String tax;
+    private String id;
 
     public String getName() {
         return name;
@@ -37,5 +38,13 @@ public class Data {
         this.name = name;
         this.amount = amount;
         this.tax = tax;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
