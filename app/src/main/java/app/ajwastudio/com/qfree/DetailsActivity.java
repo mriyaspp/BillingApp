@@ -58,7 +58,7 @@ public class DetailsActivity extends AppCompatActivity {
     private String key;
     private Bitmap bitmap;
     private QRGEncoder qrgEncoder;
-    private String savePath = Environment.getExternalStorageDirectory().getPath() + "/QFreeServer/";
+    private String savePath = Environment.getExternalStorageDirectory().getPath() + "/QFree/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

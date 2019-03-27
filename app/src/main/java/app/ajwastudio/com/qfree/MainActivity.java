@@ -2,13 +2,10 @@ package app.ajwastudio.com.qfree;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Handler;
-import android.preference.PreferenceManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,12 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,9 +24,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     DatabaseReference myRef;
     private Button OrderButton;
-    Double total=0.0;
+    Double total = 0.0;
     TextView Total;
     ProgressBar progressBar;
 
@@ -60,21 +52,20 @@ public class MainActivity extends AppCompatActivity {
 
 
     private String key;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initial();
 
-  //      progressBar.setVisibility(View.VISIBLE);
+        //      progressBar.setVisibility(View.VISIBLE);
 
 
         addToCart();
 
 
-
-
-        Toast.makeText(this, ""+key, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "" + key, Toast.LENGTH_SHORT).show();
     }
 
     private void addToCart() {
@@ -120,52 +111,49 @@ public class MainActivity extends AppCompatActivity {
 //                }
 //            });
 
-                Cart.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        Cart.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                        progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
 
-                        try {
+                try {
 
-                            orderList.clear();
-                            for (DataSnapshot orderChild : dataSnapshot.getChildren()) {
-                                Data order = orderChild.getValue(Data.class);
-                                orderList.add(order);
-                                total = total + Double.parseDouble(order.getAmount());
-                                //Toast.makeText(MainActivity.this, ""+orderList.get(0), Toast.LENGTH_SHORT).show();
-                            }
-                        }catch (Exception e){
-
-                        }
-
-
-                        Total.setText(""+total);
-
-                        OrderListAdapter adapter = new OrderListAdapter(orderList, getApplicationContext());
-                        homeRecyclerView.setAdapter(adapter);
-                        if(orderList.isEmpty()){
-                            Toast.makeText(MainActivity.this, "Cart is empty", Toast.LENGTH_SHORT).show();
-                        }
-                        progressBar.setVisibility(View.GONE);
+                    orderList.clear();
+                    for (DataSnapshot orderChild : dataSnapshot.getChildren()) {
+                        Data order = orderChild.getValue(Data.class);
+                        orderList.add(order);
+                        total = total + Double.parseDouble(order.getAmount());
+                        //Toast.makeText(MainActivity.this, ""+orderList.get(0), Toast.LENGTH_SHORT).show();
                     }
+                } catch (Exception e) {
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
-                OrderButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startActivity(new Intent(MainActivity.this,Payment.class));
-
-                    }
-                });
+                }
 
 
+                Total.setText("" + total);
 
+                OrderListAdapter adapter = new OrderListAdapter(orderList, getApplicationContext());
+                homeRecyclerView.setAdapter(adapter);
+                if (orderList.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Cart is empty", Toast.LENGTH_SHORT).show();
+                }
+                progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        OrderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, Payment.class));
+
+            }
+        });
 
 
     }
@@ -177,19 +165,19 @@ public class MainActivity extends AppCompatActivity {
 //                .getDefaultSharedPreferences(this.getApplicationContext());
 //        prefsEditor = appSharedPrefs.edit();
 //        gson = new Gson();
-        progressBar=(ProgressBar)findViewById(R.id.prograss);
-        OrderButton=(Button)findViewById(R.id.order);
+        progressBar = (ProgressBar) findViewById(R.id.prograss);
+        OrderButton = (Button) findViewById(R.id.order);
         headerDatabase = FirebaseDatabase.getInstance().getReference().child("user");
-        mAuth= FirebaseAuth.getInstance();
-        user=mAuth.getCurrentUser();
-        Cart= FirebaseDatabase.getInstance().getReference().child("Cart").child(mAuth.getUid());
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        Cart = FirebaseDatabase.getInstance().getReference().child("Cart").child(mAuth.getUid());
 
-        FloatingActionButton fButton=(FloatingActionButton)findViewById(R.id.addNew);
-        Total=(TextView)findViewById(R.id.cart_price);
+        FloatingActionButton fButton = (FloatingActionButton) findViewById(R.id.addNew);
+        Total = (TextView) findViewById(R.id.cart_price);
         fButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,ScanQR.class));
+                startActivity(new Intent(MainActivity.this, ScanQR.class));
             }
         });
 
@@ -203,14 +191,13 @@ public class MainActivity extends AppCompatActivity {
         try {
             s_uid = mAuth.getUid();
 
-        }catch (Exception e){
+        } catch (Exception e) {
             s_uid = null;
         }
-        if(s_uid==null){
-            startActivity(new Intent(MainActivity.this,LoginActivity.class));
+        if (s_uid == null) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
-        }
-        else {
+        } else {
 
         }
 
@@ -238,9 +225,6 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 //        });
-
-
-
 
 
     }
@@ -302,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
                 tax = itemView.findViewById(R.id.item_tax);
                 name = itemView.findViewById(R.id.item_tiitle);
                 price = itemView.findViewById(R.id.item_price);
-                cardView=itemView.findViewById(R.id.card);
+                cardView = itemView.findViewById(R.id.card);
             }
         }
     }
