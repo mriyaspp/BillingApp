@@ -35,6 +35,7 @@ public class Payment extends AppCompatActivity {
     private FirebaseAuth mAuth;
     Double total=0.0;
     String uName,phno;
+    TextView totalVal;
     Data order;
     long getChildrenCounts;
     String day="AM";
@@ -44,6 +45,7 @@ public class Payment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
         payment=(Button) findViewById(R.id.button);
+        totalVal=(TextView) findViewById(R.id.total);
         mAuth= FirebaseAuth.getInstance();
         orderList = new ArrayList<>();
 
@@ -120,6 +122,7 @@ public class Payment extends AppCompatActivity {
                             DatabaseReference db = purchase.push();
                             for (int i = 0; i < orderList.size(); i++) {
                                 Data ol = orderList.get(i);
+
                                 db.child("pd" + (i + 1)).setValue(ol.getName() + ",1," + ol.getTax() + "," + ol.getAmount() + "," + total + "," + uName + "," + phno + "," + "paid" + "," + outDate + "," + outTime);
                             }
 

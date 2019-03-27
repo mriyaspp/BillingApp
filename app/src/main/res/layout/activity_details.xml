@@ -95,5 +95,25 @@
     android:id="@+id/billList"
     android:layout_marginTop="10dp"
     android:layout_below="@+id/billhead"></android.support.v7.widget.RecyclerView>
+    <ImageView
+        android:id="@+id/ivQRCode"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/billList"
+    />
+    <Button
+        android:id="@+id/btDownload"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_below="@id/ivQRCode"
+        android:text="Download"
+        android:background="@drawable/border_tax_inv"
+        android:layout_marginBottom="16dp"
+        android:layout_centerHorizontal="true"
+/>
 
 </RelativeLayout>
