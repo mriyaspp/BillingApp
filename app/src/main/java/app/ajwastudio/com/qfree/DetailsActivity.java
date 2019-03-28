@@ -215,8 +215,6 @@ public class DetailsActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull OrderViewHolder orderViewHolder, int i) {
             try {
                 final Bill order = orderList.get(i);
-                Toast.makeText(mCtx, "" + order.getName(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(mCtx, "" + i, Toast.LENGTH_SHORT).show();
                 orderViewHolder.name.setText(order.getName());
                 orderViewHolder.tax.setText(order.getTax());
                 orderViewHolder.price.setText(order.getAmount());
