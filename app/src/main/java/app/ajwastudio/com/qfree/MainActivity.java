@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 ) {
                     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1);
                 }
-            }git
+            }
             initial();
             //      progressBar.setVisibility(View.VISIBLE);
             addToCart();
